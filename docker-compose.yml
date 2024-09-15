@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    image: node:22.3.0  # Use a imagem oficial do Node.js 22.3.0
+    working_dir: /src
+    volumes:
+      - .:/src  # Mapeia o código local para o diretório de trabalho do container
+      - node_modules  # Garante que o node_modules do container não sobrescreva o local
+    ports:
+      - "3000:3000"  # Mapeia a porta 3000 do host para a porta 3000 do container
+    environment:
+      - NODE_ENV=development  # Define a variável de ambiente
+    command: npm start  # Comando para iniciar a aplicação
