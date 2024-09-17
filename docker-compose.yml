@@ -1,14 +1,34 @@
 version: '3.8'
 
 services:
-  app:
-    image: node:22.3.0  # Use a imagem oficial do Node.js 22.3.0
-    working_dir: /src
+  node:
+    image: node:22.3.0
+    working_dir: /usr/src
     volumes:
-      - .:/src  # Mapeia o código local para o diretório de trabalho do container
-      - node_modules  # Garante que o node_modules do container não sobrescreva o local
+      - .:/usr/src
     ports:
-      - "3000:3000"  # Mapeia a porta 3000 do host para a porta 3000 do container
+      - "3000:3000"
+    depends_on:
+      - postgres
+    command: sh -c "npm install && npm run dev"
+
+  postgres:
+    image: postgres:13
     environment:
-      - NODE_ENV=development  # Define a variável de ambiente
-    command: npm start  # Comando para iniciar a aplicação
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - node
+
+volumes:
+  postgres_data:
