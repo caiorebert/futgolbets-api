@@ -13,7 +13,7 @@ services:
       - '3000:3000'
     environment:
       NODE_ENV: development
-    command: npm run start:dev
+    command: npm run start:prod
   bd:
     image: postgres:15
     container_name: nestjs_bd
